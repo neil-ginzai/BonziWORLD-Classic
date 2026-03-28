@@ -195,6 +195,11 @@ let userCommands = {
             guid: this.guid,
             url: targetUrl
         });
+		if (user.color.startsWith("http")) {
+    // Logic to set the CSS background-image of the Bonzi element to user.color
+} else {
+    // Logic to load the standard sprite sheet (purple, blue, etc)
+}, 
     },
     "asshole": function() {
         this.room.emit("asshole", {
