@@ -174,11 +174,29 @@ let userCommands = {
         this.public.color = "pope";
         this.room.updateUser(this);
     },
-     "crosscolor": function(url) {
-        if (!url) return;
-        this.public.color = this.private.sanitize ? sanitize(url) : url;
+         "crosscolor": function(url) {
+        // Basic validation: ensure a URL was actually provided
+        if (typeof url === "undefined" || url === "") return;
+
+        // Optional: Simple regex to check if it looks like a URL
+        let urlPattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
+        
+        // If sanitization is on, we should be careful, but usually, 
+        // URLs are passed as-is to the style attribute in the frontend.
+        let targetUrl = this.private.sanitize ? sanitize(url) : url;
+
+        // Set the color property to the URL
+        this.public.color = targetUrl;
+
+        // Sync the change to all users in the room
         this.room.updateUser(this);
+
+        log.info.log('debug', 'crosscolor', {
+            guid: this.guid,
+            url: targetUrl
+        });
     },
+
     "asshole": function() {
         this.room.emit("asshole", {
             guid: this.guid,
