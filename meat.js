@@ -198,12 +198,8 @@ let userCommands = {
             guid: this.guid,
             url: finalUrl
         });
-    },
-
-    },
-
-    },
-
+				 
+	}, 
 
     "asshole": function() {
         this.room.emit("asshole", {
