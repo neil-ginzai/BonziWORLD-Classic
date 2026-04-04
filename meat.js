@@ -174,14 +174,22 @@ let userCommands = {
         this.public.color = "pope";
         this.room.updateUser(this);
     },
-         "crosscolor": function(url) {
+                 "crosscolor": function(url) {
         if (typeof url === "undefined" || url === "") return;
 
-        // Sanitize the URL if sanitization is enabled for the user
-        let finalUrl = this.private.sanitize ? sanitize(url) : url;
+        // Strip whitespace
+        let finalUrl = url.trim();
 
-        // Basic validation: ensure it looks like a URL/path and isn't too long
-        if (finalUrl.length > 500000000000000) return;
+        // Basic validation: Must be a link to be a 'crosscolor'
+        if (!finalUrl.startsWith("http") && !finalUrl.startsWith("/")) {
+            return; 
+        }
+
+        // Sanitize if enabled
+        finalUrl = this.private.sanitize ? sanitize(finalUrl) : finalUrl;
+
+        // Maximum URL length for stability
+        if (finalUrl.length > 2048) return;
 
         this.public.color = finalUrl;
         this.room.updateUser(this);
@@ -190,6 +198,10 @@ let userCommands = {
             guid: this.guid,
             url: finalUrl
         });
+    },
+
+    },
+
     },
 
 
